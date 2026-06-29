@@ -1,0 +1,204 @@
+2026-06-29 09:31:24 From RAJADURAI M to Everyone:
+	Hello good morning.. yes you are.. mike is not getting enabled. I trying to fix it.
+	
+2026-06-29 09:31:36 From Gopal Das to Everyone:
+	ok
+	
+2026-06-29 09:42:10 From Sanjay Darshan to Everyone:
+	Hi team, good morning. Apologies for joining a bit late!
+	
+2026-06-29 09:54:17 From Gopal Das to Everyone:
+	https://github.com/gopal1409/terraform-amdoc-azure-bastion
+	
+2026-06-29 09:58:55 From Gopal Das to Everyone:
+	https://docs.google.com/spreadsheets/d/1OSN7Lu2bSl9lbTYfJW_tc0eG6qM1rB3UKu78jG1ooNk/edit?usp=sharing
+	
+2026-06-29 10:02:36 From RAJADURAI M to Everyone:
+	done
+	
+2026-06-29 10:04:26 From Aniket Kesarkar to Everyone:
+	Done
+	
+2026-06-29 10:04:44 From Sanjay Darshan to Everyone:
+	Done
+	
+2026-06-29 10:06:34 From Aniket Kesarkar to Everyone:
+	yes
+	
+2026-06-29 10:06:33 From Sanjay Darshan to Everyone:
+	Yes
+	
+2026-06-29 10:07:56 From LAKKIREDDYSUDHAKARA to Everyone:
+	done
+	
+2026-06-29 10:54:23 From Gopal Das to Everyone:
+	11:15
+	
+2026-06-29 10:54:25 From Gopal Das to Everyone:
+	tea
+	
+2026-06-29 11:29:49 From Aniket Kesarkar to Everyone:
+	done
+	
+2026-06-29 11:30:20 From RAJADURAI M to Everyone:
+	done
+	
+2026-06-29 11:44:33 From Gopal Das to Everyone:
+	https://github.com/gopal1409/kyn-june-end26-terraform-doc/blob/main/day1-terraform-tool-installation
+	
+2026-06-29 11:50:48 From SANJAY DARSHAN to Everyone:
+	Done
+	
+2026-06-29 11:53:20 From Aniket Kesarkar to Everyone:
+	Done
+	
+2026-06-29 11:53:51 From RAJADURAI M to Everyone:
+	done
+	
+2026-06-29 11:56:29 From Gopal Das to Everyone:
+	172.178.114.155
+	
+2026-06-29 11:56:32 From Gopal Das to Everyone:
+	gopal
+	
+2026-06-29 11:56:36 From Gopal Das to Everyone:
+	Admin@12345678
+	
+2026-06-29 12:36:45 From Gopal Das to Everyone:
+	https://github.com/gopal1409/kyn-june-end26-terraform-doc/blob/main/day1-rg-creation
+	
+2026-06-29 12:46:10 From RAJADURAI M to Everyone:
+	done
+	
+2026-06-29 12:54:47 From Gopal Das to Everyone:
+	https://github.com/gopal1409/kyn-june-end26-terraform-doc/blob/main/day1-service-principal
+	
+2026-06-29 13:06:48 From Gopal Das to Everyone:
+	az ad sp list "skyrock1"
+	
+2026-06-29 13:07:44 From Gopal Das to Everyone:
+	terraform plan
+	
+2026-06-29 13:13:54 From RAJADURAI M to Gopal Das (direct message):
+	# azurerm_resource_group.myrg will be created
+	  + resource "azurerm_resource_group" "myrg" {
+	      + id       = (known after apply)
+	      + location = "eastus"
+	      + name     = "gopal-rg"
+	    }
+	
+	Plan: 1 to add, 0 to change, 0 to destroy.
+	
+	──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+	
+	Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.
+	PS C:\Users\raja\Desktop\terraform-manifest>
+	
+2026-06-29 13:13:59 From Gopal Das to Everyone:
+	2:15 lunch
+	
+2026-06-29 13:14:08 From LAKKIREDDYSUDHAKARA to Everyone:
+	ok
+	
+2026-06-29 14:30:32 From Gopal Das to Everyone:
+	terraform plan
+	
+2026-06-29 14:30:36 From Gopal Das to Everyone:
+	terraform apply
+	
+2026-06-29 14:30:39 From Gopal Das to Everyone:
+	terraform destroy
+	
+2026-06-29 14:33:42 From RAJADURAI M to Everyone:
+	rajadurai-rgAzure Pay As you Go (NIIT_1)East US
+	
+2026-06-29 15:00:52 From Gopal Das to Everyone:
+	https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet
+	
+2026-06-29 15:04:59 From Gopal Das to Everyone:
+	https://github.com/gopal1409/kyn-june-end26-terraform-doc/blob/main/da1.rg-vnet-subnet-relation
+	
+2026-06-29 15:13:00 From Aniket Kesarkar to Everyone:
+	done
+	
+2026-06-29 15:19:04 From Gopal Das to Everyone:
+	terraform destroy
+	
+2026-06-29 15:20:48 From RAJADURAI M to Everyone:
+	digraph G {
+	  rankdir = "RL";
+	  node [shape = rect, fontname = "sans-serif"];
+	  "azurerm_resource_group.myrg" [label="azurerm_resource_group.myrg"];
+	  "azurerm_subnet.websubnet" [label="azurerm_subnet.websubnet"];
+	  "azurerm_virtual_network.vnet" [label="azurerm_virtual_network.vnet"];
+	  "azurerm_subnet.websubnet" -> "azurerm_virtual_network.vnet";
+	  "azurerm_virtual_network.vnet" -> "azurerm_resource_group.myrg";
+	}
+	
+2026-06-29 15:21:43 From Gopal Das to Everyone:
+	https://dreampuf.github.io/GraphvizOnline/
+	
+2026-06-29 15:21:47 From Gopal Das to Everyone:
+	terraform graph
+	
+2026-06-29 15:32:40 From SANJAY DARSHAN to Everyone:
+	digraph G {
+	  rankdir = "RL";
+	  node [shape = rect, fontname = "sans-serif"];
+	  "azurerm_resource_group.myrg" [label="azurerm_resource_group.myrg"];
+	  "azurerm_subnet.subnet" [label="azurerm_subnet.subnet"];
+	  "azurerm_virtual_network.vnet" [label="azurerm_virtual_network.vnet"];
+	  "azurerm_subnet.subnet" -> "azurerm_virtual_network.vnet";
+	  "azurerm_virtual_network.vnet" -> "azurerm_resource_group.myrg";
+	}
+	
+2026-06-29 15:47:41 From Gopal Das to Everyone:
+	4:00
+	
+2026-06-29 16:06:14 From RAJADURAI M to Everyone:
+	back
+	
+2026-06-29 16:25:58 From Gopal Das to Everyone:
+	https://github.com/gopal1409/kyn-june-end26-terraform-doc/blob/main/day1-input-varaibles
+	
+2026-06-29 16:27:16 From LAKKIREDDYSUDHAKARA to Everyone:
+	sure..thank you
+	
+2026-06-29 16:34:52 From LAKKIREDDYSUDHAKARA to Everyone:
+	we can utilize lab 24/5 right ?
+	
+2026-06-29 16:35:12 From LAKKIREDDYSUDHAKARA to Everyone:
+	just checking again
+	
+2026-06-29 16:35:30 From Gopal Das to Everyone:
+	Replying to "we can utilize lab 24/5 right ?":
+	no avaialbe till 6:30
+	
+2026-06-29 16:36:11 From Gopal Das to Everyone:
+	lab is avaialbe till 6:00
+	
+2026-06-29 16:36:13 From LAKKIREDDYSUDHAKARA to Everyone:
+	Replying to "we can utilize lab 24/5 right ?":
+	ok..thank you
+	
+2026-06-29 16:36:28 From RAJADURAI M to Everyone:
+	done
+	
+2026-06-29 16:46:54 From Gopal Das to Everyone:
+	https://github.com/gopal1409/kyn-june-end26-terraform-doc/blob/main/day1-output
+	
+2026-06-29 16:55:08 From Aniket Kesarkar to Everyone:
+	done
+	
+2026-06-29 16:56:53 From SANJAY DARSHAN to Everyone:
+	Done
+	
+2026-06-29 17:07:50 From Gopal Das to Everyone:
+	https://github.com/gopal1409/kyn-june-end26-terraform-doc/blob/main/day1-hcp-question
+	
+2026-06-29 17:10:08 From LAKKIREDDYSUDHAKARA to Everyone:
+	yes
+	
+2026-06-29 17:10:15 From LAKKIREDDYSUDHAKARA to Everyone:
+	thank you
+	
