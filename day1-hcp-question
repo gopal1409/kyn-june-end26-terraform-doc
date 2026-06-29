@@ -1,0 +1,629 @@
+Question 1
+
+What is the purpose of the following block?
+
+terraform {
+  required_providers {
+    azurerm = {
+      source = "hashicorp/azurerm"
+      version = "=4.1.0"
+    }
+  }
+}
+A.
+
+Downloads Azure CLI
+
+B.
+
+Specifies which Terraform version to install
+
+C.
+
+Specifies the Azure provider and version Terraform should use
+
+D.
+
+Creates an Azure Resource Group
+
+✅ Answer: C
+
+Explanation
+
+The required_providers block tells Terraform
+
+Which provider to download
+Where it comes from
+Which version to install
+
+Terraform downloads the provider during
+
+terraform init
+Question 2
+
+Which command downloads the Azure Provider?
+
+A.
+
+terraform apply
+
+B.
+
+terraform init
+
+C.
+
+terraform fmt
+
+D.
+
+terraform validate
+
+✅ Answer: B
+
+Explanation
+
+terraform init
+
+Downloads providers
+Initializes backend
+Downloads modules
+
+It is always the first command executed.
+
+Question 3
+
+Why does this resource work without specifying the Resource Group location?
+
+location = azurerm_resource_group.myrg.location
+
+A.
+Terraform copies the value from Azure Portal
+
+B.
+Terraform reads the value from tfstate
+
+C.
+Terraform uses resource references
+
+D.
+Terraform guesses the location
+
+✅ Answer: C
+
+Explanation
+
+Terraform automatically creates dependencies using references.
+
+azurerm_resource_group.myrg.location
+
+means
+
+Use the location attribute of the Resource Group.
+
+Terraform knows the VNet depends on the Resource Group.
+
+Question 4
+
+Which file stores the current infrastructure state?
+
+A.
+
+terraform.tfvars
+
+B.
+
+terraform.lock.hcl
+
+C.
+
+terraform.tfstate
+
+D.
+
+variables.tf
+
+✅ Answer: C
+
+Explanation
+
+Terraform stores
+
+Resource IDs
+Attributes
+Dependencies
+Metadata
+
+inside
+
+terraform.tfstate
+Question 5
+
+Why doesn't the subnet require an explicit depends_on?
+
+virtual_network_name = azurerm_virtual_network.vnet.name
+
+A.
+Terraform automatically creates implicit dependency
+
+B.
+Azure creates it
+
+C.
+The provider creates it
+
+D.
+Terraform ignores dependency
+
+✅ Answer: A
+
+Explanation
+
+Resource references automatically create implicit dependencies.
+
+Execution order becomes
+
+Resource Group
+        ↓
+Virtual Network
+        ↓
+Subnet
+Question 6
+
+Which resource is created first?
+
+Subnet
+
+VNet
+
+Resource Group
+
+A.
+Subnet
+
+B.
+VNet
+
+C.
+Resource Group
+
+D.
+All simultaneously
+
+✅ Answer: C
+
+Explanation
+
+Terraform dependency graph determines
+
+Resource Group
+↓
+
+Virtual Network
+↓
+
+Subnet
+Question 7
+
+Which variable type is used here?
+
+variable "resource_group_name" {
+  type = string
+}
+
+A.
+number
+
+B.
+bool
+
+C.
+string
+
+D.
+list
+
+✅ Answer: C
+
+Explanation
+
+Terraform supports
+
+string
+number
+bool
+list
+map
+object
+tuple
+set
+Question 8
+
+What happens if the variable has a default value?
+
+default="East US"
+
+A.
+Terraform ignores it
+
+B.
+Terraform requires user input
+
+C.
+Terraform uses default unless overridden
+
+D.
+Terraform throws an error
+
+✅ Answer: C
+
+Explanation
+
+Variables can be overridden by
+
+terraform.tfvars
+
+CLI
+
+Environment Variables
+
+Workspace Variables
+
+Otherwise
+
+default
+
+is used.
+
+Question 9
+
+Which output prints the VNet name?
+
+A.
+
+output "resource_group_name"
+
+B.
+
+output "virtual_network_name"
+
+C.
+
+output "subnet_name"
+
+D.
+
+output "location"
+
+✅ Answer: B
+
+Explanation
+output "virtual_network_name" {
+ value = azurerm_virtual_network.vnet.name
+}
+
+After
+
+terraform apply
+
+Terraform prints
+
+Outputs:
+
+virtual_network_name = gopal-network
+Question 10
+
+What is the purpose of Outputs?
+
+A.
+Create variables
+
+B.
+Store secrets
+
+C.
+Display useful information after apply
+
+D.
+Install providers
+
+✅ Answer: C
+
+Explanation
+
+Outputs expose values such as
+
+VM Public IP
+Resource Group Name
+VNet Name
+Storage Account Name
+Question 11
+
+Which command checks syntax only?
+
+A.
+
+terraform apply
+
+B.
+
+terraform plan
+
+C.
+
+terraform validate
+
+D.
+
+terraform init
+
+✅ Answer: C
+
+Explanation
+
+terraform validate
+
+Checks
+
+Syntax
+Missing arguments
+Invalid references
+
+It does not contact Azure.
+
+Question 12
+
+Which command formats Terraform code?
+
+A.
+
+terraform validate
+
+B.
+
+terraform fmt
+
+C.
+
+terraform graph
+
+D.
+
+terraform output
+
+✅ Answer: B
+
+Explanation
+
+Example
+
+Before
+
+resource"azurerm_resource_group""myrg"{
+
+After
+
+resource "azurerm_resource_group" "myrg" {
+Question 13
+
+What does this reference return?
+
+azurerm_virtual_network.vnet.name
+
+A.
+Resource ID
+
+B.
+Location
+
+C.
+Name attribute
+
+D.
+Subscription ID
+
+✅ Answer: C
+
+Explanation
+
+Syntax
+
+ResourceType.ResourceName.Attribute
+
+returns the specified attribute.
+
+Question 14
+
+Which command shows what Terraform will create before deployment?
+
+A.
+
+terraform destroy
+
+B.
+
+terraform fmt
+
+C.
+
+terraform plan
+
+D.
+
+terraform state
+
+✅ Answer: C
+
+Explanation
+
+terraform plan
+
+Shows
+
++ create
+
+~ modify
+
+- destroy
+
+without making changes.
+
+Question 15
+
+After changing
+
+address_space=["10.1.0.0/16"]
+
+which command shows the impact?
+
+A.
+
+terraform fmt
+
+B.
+
+terraform validate
+
+C.
+
+terraform plan
+
+D.
+
+terraform output
+
+✅ Answer: C
+
+Explanation
+
+The plan command previews infrastructure changes before applying them.
+
+Question 16
+
+What is the execution order of these resources?
+
+Resource Group
+
+↓
+
+Virtual Network
+
+↓
+
+Subnet
+
+Why?
+
+A.
+Alphabetical order
+
+B.
+Random order
+
+C.
+Based on implicit dependencies
+
+D.
+Order in the file
+
+✅ Answer: C
+
+Explanation
+
+Terraform builds a dependency graph from resource references, not from the order they appear in the .tf files.
+
+Question 17
+
+If the Resource Group already exists and you want Terraform to manage it, which command is appropriate?
+
+A.
+
+terraform validate
+
+B.
+
+terraform import
+
+C.
+
+terraform output
+
+D.
+
+terraform destroy
+
+✅ Answer: B
+
+Explanation
+
+terraform import associates an existing infrastructure resource with a Terraform resource block so it can be managed in the state file.
+
+Question 18
+
+Which command displays the values defined in the output blocks without reapplying the configuration?
+
+A.
+
+terraform show
+
+B.
+
+terraform state list
+
+C.
+
+terraform output
+
+D.
+
+terraform plan
+
+✅ Answer: C
+
+Explanation
+
+terraform output reads the values stored in the Terraform state and displays the configured outputs.
+
+Question 19
+
+What is the purpose of the provider "azurerm" block?
+
+A.
+Creates Azure resources
+
+B.
+Configures how Terraform communicates with Azure
+
+C.
+Defines variables
+
+D.
+Stores outputs
+
+✅ Answer: B
+
+Explanation
+
+The provider block configures the Azure provider (features, authentication, and provider-specific settings), enabling Terraform to interact with Azure Resource Manager.
+
+Question 20
+
+Which statement about .tf files is correct?
+
+A.
+Terraform executes them in filename order.
+
+B.
+Each .tf file is processed independently.
+
+C.
+Terraform loads all .tf files in a directory as a single configuration.
+
+D.
+Only main.tf is processed.
+
+✅ Answer: C
+
+Explanation
+
+Terraform reads all .tf files in the working directory and combines them into one configuration. This is why resources, variables, and outputs can be split across files such as main.tf, variables.tf, and outputs.tf.
