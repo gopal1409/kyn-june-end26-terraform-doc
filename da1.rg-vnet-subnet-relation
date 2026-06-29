@@ -19,3 +19,4 @@ https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/
 ##copy the subnet block from line 17 documenation. 
 ###change the subnet refrence block to web_subnet 
 ##map the vnet and resourcegroup
+terraform apply
