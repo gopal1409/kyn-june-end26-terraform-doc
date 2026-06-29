@@ -1,0 +1,14 @@
+###we will install all the terraform tools
+  ##you need to open powershell in the admin mode
+  #we will use choco packagemanager to install all the packages
+  Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+  ##once we install the package close powershell start again in admin mode 
+  choco install terraform
+  choco install vscode
+  choco install git
+  choco install azure-cli
+  ###you need to exit and start again the poweshell
+  ##to verify 
+  git 
+  az
+  terraform
