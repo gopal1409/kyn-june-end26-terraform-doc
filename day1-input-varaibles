@@ -1,0 +1,38 @@
+#create a new generic file a5.generic-varaibles.tf we are defineing all the varaibles inside it
+variable "resource_group_name" {
+  description = "The name of the resource group"
+  type        = string
+  #default     = "gopal-rg" #you need to provide an default
+}
+
+variable "resource_group_location" {
+  description = "The Azure region where the resources will be created"
+  type        = string
+  default     = "East US"
+}
+
+variable "environment" {
+    description = "The environment for the resources (e.g., dev, test, prod)"
+    type        = string
+    default     = "dev" 
+}
+
+variable "business_unit" {
+    description = "The business unit for the resources"
+    type        = string
+    default     = "sap" 
+}
+
+#lets modify the a2.resource.tf file can call this varaibles using var.nameofthevaraibles. delete everything and add this line
+# Create a resource group
+resource "azurerm_resource_group" "myrg" {
+  name     = var.resource_group_name #gopal-rg
+  location = var.resource_group_location
+}
+#after this do terraform apply
+##if you want to check the varaibles and values agains it 
+terraform console
+var.resource_group_name
+var.resource_group_location
+#press ctrl c to come out of the terraform console
+
