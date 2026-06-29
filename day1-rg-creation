@@ -1,0 +1,29 @@
+##on your desktop you need to create a folder called as terraform-manifest 
+  #then open visual studio code and select the folder
+  #3inside that create a file called as 
+  a1.provider.tf
+  ##3inside this provider block add this code 
+  terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "=4.1.0"
+    }
+  }
+}
+
+# Configure the Microsoft Azure Provider
+provider "azurerm" {
+  #resource_provider_registrations = "none" # This is only required when the User, Service Principal, or Identity running Terraform lacks the permissions to register Azure Resource Providers.
+  features {}
+}
+
+##create another file a2.resource.tf
+  # Create a resource group
+resource "azurerm_resource_group" "myrg" {
+  name     = "gopal-rg"
+  location = "East US"
+}
+##then open terminal inside visual studio code
+  #run a command terraform init
+  ##check the plugin directory created 
