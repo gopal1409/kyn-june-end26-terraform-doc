@@ -1,0 +1,15 @@
+#in the terminal run this command which will generate the ssh key
+  18 mkdir ssh-keys                                                                                                        
+  19 cd .\ssh-keys\ 
+  #just press enter enter dont give any passpharses
+  20 ssh-keygen -m PEM -t rsa -b 4096 -C "azureuser@myserver" -f terraform-azure.pem                                       
+  21 cd .. 
+  ###once generate you can see it in your visual studio code
+
+  #in your root folde of terrform we will create a directory INSIDE the directory create a file app.sh and paste the content
+#!/bin/bash
+sudo apt-get update -y
+sudo apt-get install -y unzip wget curl git
+sudo apt-get install -y apache2
+sudo echo "welcome to my website $(hostname)" > /var/www/html/index.html
+  
