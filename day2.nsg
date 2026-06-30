@@ -43,4 +43,7 @@ resource "azurerm_network_security_rule" "web_traffic" {
 #security group, security rule and association
 #run terraform plan see that nsg rule is looping usng the local block
   #then do terraform apply
-  ####
+  ####lets do graph
+terraform graph
+##copy the output paste it in this link
+https://dreampuf.github.io/GraphvizOnline/
