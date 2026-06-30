@@ -25,3 +25,15 @@ data "azurerm_key_vault_secret" "vm_password" {
     name         = "win-pass" #change it to secret name created inside the vault
     key_vault_id = data.azurerm_key_vault.existing_kv.id
 }
+#you need to open cloud shell run this command 
+KV_ID=$(az keyvault show \
+  --name gopal-win-vault \ 
+  --resource-group gopal-vault \
+  --query id -o tsv)
+
+Assign the role:
+
+az role assignment create \
+  --assignee 48526d55-b2fc-4a55-96ff-22845f827cb8 \
+  --role "Key Vault Secrets User" \
+  --scope $KV_ID
