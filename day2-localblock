@@ -1,0 +1,26 @@
+#lets create a new file called as a7.local.tf
+  locals {
+  resource_name_prefix = "${var.business_unit}-${var.environment}" #sap-dev
+
+  project_lucky = {
+    Project      = "Terraform"
+    Environment  = var.environment
+    BusinessUnit = var.business_unit
+    costcenter   = "sap007"
+
+  }
+}
+
+##modify the a2.resource.tf delete everything and add this block
+  resource "azurerm_resource_group" "myrg" {
+  name = "${local.resource_name_prefix}-${var.resource_group_name}" #sap-dev-gopal-rg
+  #business division + environment + name of the resource group
+  location = var.resource_group_location
+
+  tags = local.project_lucky
+}
+  #####modify the a3.vnet.tf file also before the end of the curly braces add this line 
+  
+ tags = local.project_lucky
+    ####once done do terraform apply verify all the tags are added or not in your rg
+    
