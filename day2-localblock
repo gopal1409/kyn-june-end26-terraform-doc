@@ -23,4 +23,12 @@
   
  tags = local.project_lucky
     ####once done do terraform apply verify all the tags are added or not in your rg
+
+#if you want to display all this tags 
+#inside a6.output.tf
+#below that add this block 
+output "local_tags" {
+  description = "The tags defined in the local block"
+  value       = local.project_lucky
+}
     
