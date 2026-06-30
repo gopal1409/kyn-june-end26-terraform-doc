@@ -1,0 +1,60 @@
+Since you're logging in using a Service Principal, the error is almost certainly due to the service principal not having permission to read secrets from the Key Vault.
+
+The error confirms this:
+
+ForbiddenByRbac
+Assignment: (not found)
+
+Caller:
+appid=48526d55-b2fc-4a55-96ff-22845f827cb8
+oid=b82020e2-c06c-483c-ace6-2f69ac79b162
+
+This means Terraform authenticated successfully, but Azure RBAC cannot find any role assignment that allows this service principal to read secrets.
+
+Step 1: Verify the Service Principal
+az login --service-principal \
+  --username <CLIENT_ID> \
+  --password <CLIENT_SECRET> \
+  --tenant <TENANT_ID>
+
+Verify:
+
+az account show
+Step 2: Assign Key Vault Secrets User Role
+
+Get the Key Vault Resource ID:
+
+KV_ID=$(az keyvault show \
+  --name gopal-win-vault \
+  --resource-group gopal-vault \
+  --query id -o tsv)
+
+Assign the role:
+
+az role assignment create \
+  --assignee 48526d55-b2fc-4a55-96ff-22845f827cb8 \
+  --role "Key Vault Secrets User" \
+  --scope $KV_ID
+
+Or using the object ID:
+
+az role assignment create \
+  --assignee-object-id b82020e2-c06c-483c-ace6-2f69ac79b162 \
+  --role "Key Vault Secrets User" \
+  --scope $KV_ID
+Step 3: Verify
+az role assignment list \
+    --assignee 48526d55-b2fc-4a55-96ff-22845f827cb8 \
+    --scope $KV_ID \
+    --output table
+
+Expected:
+
+Role
+------------------------
+Key Vault Secrets User
+Step 4: Wait
+
+RBAC takes a few minutes to propagate.
+
+Wait 5–10 minutes.
