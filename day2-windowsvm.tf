@@ -31,3 +31,42 @@ KV_ID=$(az keyvault show --name gopal-win-vault --resource-group gopal-vault --q
 Assign the role:
 
 az role assignment create --assignee 48526d55-b2fc-4a55-96ff-22845f827cb8 --role "Key Vault Secrets User" --scope $KV_ID
+#lets open port 3389 replace port 22 to 3389 in a8.nsg
+#lets create a new file a13.windowsvm.tf
+resource "azurerm_windows_virtual_machine" "web_vm" {
+
+  name                = "${local.resource_name_prefix}-win11vm"
+  location            = azurerm_resource_group.myrg.location
+  resource_group_name = azurerm_resource_group.myrg.name
+
+  size = "Standard_D2s_v3" 
+
+  admin_username = "azureuser"
+
+  admin_password = data.azurerm_key_vault_secret.vm_password.value
+
+  network_interface_ids = [
+    azurerm_network_interface.web_nic.id
+  ]
+
+  provision_vm_agent          = true
+  enable_automatic_updates    = true
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Premium_LRS"
+  }
+
+  source_image_reference {
+    publisher = "MicrosoftWindowsDesktop"
+    offer     = "windows-11"
+    sku       = "win11-25h2-pro"
+    version   = "latest"
+  }
+
+  tags = local.project_lucky
+}
+
+#after this do terraform apply
+once you get the public ip open rdp
+#put the public ip and connect put username as azureuser and password you store inside vault
