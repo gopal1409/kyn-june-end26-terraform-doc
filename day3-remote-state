@@ -7,4 +7,33 @@
 terraform.tfstate
 terraform.tfstate.backup
 .terraform.lock.hcl
+#lets create an storage account in azure.  once the storage account and container is created 
+##we need to put this information inside terraform provider block. a1. provider.tf or match this 
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "=4.1.0"
+    }
+  }
+  backend "azurerm" {
+    resource_group_name  = "tfstate-rg" #change as per the storage account 
+    storage_account_name = "tfstateacc" #change the storage account name 
+    container_name       = "tfstate" #if other than tfstate you have define change it
+    key                  = "sky-rocket-project.tfstate" #this will store the state file with this naming convetion
+  }
+}
+
+# Configure the Microsoft Azure Provider
+provider "azurerm" {
+  #resource_provider_registrations = "none" # This is only required when the User, Service Principal, or Identity running Terraform lacks the permissions to register Azure Resource Providers.
+  features {}
+}
+
+#after this 
+terraform init
+terraform plan
+terraform apply
+
+
   
