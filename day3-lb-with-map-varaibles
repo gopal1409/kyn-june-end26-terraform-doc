@@ -88,3 +88,43 @@ resource "azurerm_lb_backend_address_pool" "web_lb_pool" {
 
 #finally attach the nic card with pool
 #then do terraform apply verify the lb is created inside your resource group and backend pool is also created
+
+#lets update the  file a16.lb.tf and add probe rule and backend attachment 
+#lb probe
+resource "azurerm_lb_probe" "web_lb_probe" {
+  loadbalancer_id     = azurerm_lb.web_lb.id #this probe will be attached with lb rule
+  name                = "${local.resource_name_prefix}-weblbprobe"
+  protocol            = "Tcp"
+  port                = 80
+  #protocol = "Http"
+  #request_path = "/var/www/html/index.html"
+  interval_in_seconds = 30  #every 30 second it will ping your port 80
+  number_of_probes    = 2 #two time it will ping your port 80 if it is not responding then it will mark the vm as unhealthy
+}
+
+#lb rule
+resource "azurerm_lb_rule" "web_lb_rule" {
+  loadbalancer_id            = azurerm_lb.web_lb.id
+  name                       = "${local.resource_name_prefix}-weblbrule"
+  protocol                   = "Tcp"
+  frontend_port              = 80 #the port of your lb 443
+  backend_port               = 80 #tomcat 8080
+  frontend_ip_configuration_name = azurerm_lb.web_lb.frontend_ip_configuration[0].name
+  backend_address_pool_ids   = [azurerm_lb_backend_address_pool.web_lb_pool.id]
+  probe_id                   = azurerm_lb_probe.web_lb_probe.id
+}
+
+#finally attach the nic card with pool
+resource "azurerm_network_interface_backend_address_pool_association" "web_nic_lb_association" {
+  for_each = var.suzuki 
+  network_interface_id    = azurerm_network_interface.web_nic[each.key].id
+  ip_configuration_name   = azurerm_network_interface.web_nic[each.key].ip_configuration[0].name
+  backend_address_pool_id = azurerm_lb_backend_address_pool.web_lb_pool.id
+}
+
+#once you do terraform apply you will get the public ip paste it in browser it will show the test page of first instance then refresh after 30sec to 1 min you will see the traffic
+#moves to another instance. 
+##exercise we will add a new car in a.15automaker.tf like alto 
+#then do terraform apply you will see a new nic card and an new vm will be created
+##go back to your lb check the backend pool you will see the third nic
+##refrest the pubic ip it will show you the third instance
