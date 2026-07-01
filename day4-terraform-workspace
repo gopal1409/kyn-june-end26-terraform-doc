@@ -1,0 +1,65 @@
+#first do terraform destory 
+#lets go to generic varaible file a5.generic variables.tf
+  variable "environment" {
+  description = "The environment for the resources (e.g., dev, test, prod)"
+  type        = string
+  #default     = "dev" #remove the default value
+}
+#then a11.linux-vm.tf look for this line 
+  size                = var.vm_size["prod"] 
+  Replace the above line with the below line in place or prod put var.environment
+  size = var.vm_size[var.environment]
+  ######################################
+  #ltes create dev.tfvars 
+  resource_group_name     = "gopal-rg" #
+resource_group_location = "East US"
+business_unit           = "sap"
+environment             = "dev"
+suzuki = {
+  "vitara" = "maruti"
+}
+
+#lets create test.tfvars
+  resource_group_name     = "gopal-rg" #
+resource_group_location = "East US"
+business_unit           = "sap"
+environment             = "test"
+suzuki = {
+  "vitara" = "maruti"
+  "swift" = "maruti"
+}
+#lets create prod.tfvare
+  resource_group_name     = "gopal-rg" #
+resource_group_location = "East US"
+business_unit           = "sap"
+environment             = "prod"
+suzuki = {
+  "vitara" = "maruti"
+  "swift" = "maruti"
+  "bentley" = "luxury"
+}
+
+#lets user terraform workspace to create it 
+  PS C:\Users\gopal\OneDrive\Desktop\terraform-manifest-kyn> terraform workspace
+Usage: terraform [global options] workspace
+
+  new, list, show, select and delete Terraform workspaces.
+
+Subcommands:
+    delete    Delete a workspace
+    list      List Workspaces
+    new       Create a new workspace
+    select    Select a workspace
+    show      Show the name of the current workspace
+PS C:\Users\gopal\OneDrive\Desktop\terraform-manifest-kyn> 
+
+  38 terraform workspace new dev                                                                                           
+  39 terraform workspace list                                                                                              
+  40 terraform apply --var-file=dev.tfvars                                                                                 
+  41 terraform workspace new test                                                                                          
+  42 terraform workspace list                                                                                              
+  43 terraform apply --var-file=test.tfvars
+  #check the state file it should have test and dev environment
+  #check the rg it will create test and dev 
+  ##fnally we need to destroy
+  
