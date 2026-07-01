@@ -1,3 +1,10 @@
 ##lets disable the windows machine. a12.windows vm by putting /* and at the end of the line */
   #lets enable the linux vm by removin /* and from the end of the line */
+#lets disable the vault feature go to a13.vault.tf /* and at the end of the line */
+##########
+#lets delete some of the folders
+.terraform
+terraform.tfstate
+terraform.tfstate.backup
+.terraform.lock.hcl
   
