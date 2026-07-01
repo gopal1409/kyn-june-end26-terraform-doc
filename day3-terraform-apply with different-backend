@@ -1,0 +1,47 @@
+If you want three separate state files
+
+Since you said:
+
+Dev
+Test
+Prod
+
+must all have different state files, do not rely on workspaces for state separation.
+
+Instead use three backend configuration files.
+
+backend-dev.hcl
+resource_group_name  = "terraform-rg"
+storage_account_name = "tfstorage001"
+container_name       = "tfstate"
+
+key = "dev.tfstate"
+backend-test.hcl
+resource_group_name  = "terraform-rg"
+storage_account_name = "tfstorage001"
+container_name       = "tfstate"
+
+key = "test.tfstate"
+backend-prod.hcl
+resource_group_name  = "terraform-rg"
+storage_account_name = "tfstorage001"
+container_name       = "tfstate"
+
+key = "prod.tfstate"
+
+Then initialize with the appropriate backend:
+
+terraform init -reconfigure \
+-backend-config=backend-dev.hcl
+
+or
+
+terraform init -reconfigure \
+-backend-config=backend-test.hcl
+
+or
+
+terraform init -reconfigure \
+-backend-config=backend-prod.hcl
+
+In this model, you don't need workspaces at all.
