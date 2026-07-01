@@ -1,0 +1,3 @@
+##lets disable the windows machine. a12.windows vm by putting /* and at the end of the line */
+  #lets enable the linux vm by removin /* and from the end of the line */
+  
