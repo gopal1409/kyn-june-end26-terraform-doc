@@ -1,0 +1,48 @@
+#to create the modules and upload the same in github
+  #on our desktop we will creat a folder-iac-project
+  #open visual studio code and select the folder 
+  ##inside the folder create a new folder terraform-modules-modules-resource_group
+  #inside resource_group Folder we will create three files main.tf variables.tf output.tf
+
+  #inside varaibles.tf add all the varaibles
+  variable "resource_name_prefix" {
+  description = "Prefix for the resource name"
+  type        = string
+ 
+}
+
+variable "name" {
+  description = "Name of the resource group"
+  type        = string
+}
+
+variable "location" {
+  description = "Location of the resource group"
+  type        = string
+}
+
+variable "tags" {
+  description = "Tags for the resource group"
+  type        = map(string)
+}
+
+#inside main.tf we are going to add resource block 
+  resource "azurerm_resource_group" "myrg" {
+  name = "${var.resource_name_prefix}-${var.name}" #sap-dev-gopal-rg
+  #business division + environment + name of the resource group
+  location = var.location
+  tags = var.tags
+
+}
+
+#finally we will add the output.tf block
+  output "name" {
+  description = "The name of the resource group"
+  value       = azurerm_resource_group.myrg.name
+}
+
+output "location" {
+  description = "The location of the resource group"
+  value       = azurerm_resource_group.myrg.location
+}
+
