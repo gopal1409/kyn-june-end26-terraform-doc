@@ -1,0 +1,80 @@
+##we will create another folder in our desktop
+  iac-project-module-use
+  #######once we create the folder we need to open another visual studio code select the iac-project-module-use folder 
+  #inside the folder we will create some files to use this modules
+  #create a local.tf
+  locals {
+  resource_name_prefix = "${var.business_unit}-${var.environment}" #sap-dev
+
+  project_lucky = {
+    Project      = "Terraform"
+    Environment  = var.environment
+    BusinessUnit = var.business_unit
+    costcenter   = "sap007"
+    Application  = "CRM"
+  }
+}
+
+##create a variables.tf
+  variable "resource_group_name" {
+  description = "The name of the resource group"
+  type        = string
+  default     = "gopal-rg" #you need to provide an default
+}
+
+variable "resource_group_location" {
+  description = "The Azure region where the resources will be created"
+  type        = string
+  default     = "East US"
+}
+
+variable "environment" {
+  description = "The environment for the resources (e.g., dev, test, prod)"
+  type        = string
+  default     = "dev"
+}
+
+variable "business_unit" {
+  description = "The business unit for the resources"
+  type        = string
+  default     = "sap"
+}
+
+
+###############create an provider.tf
+  terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "=4.1.0"
+    }
+  }
+  backend "azurerm" {
+    resource_group_name  = "gopal-storage"
+    storage_account_name = "terraformstoragegopal"
+    container_name       = "tfstate"
+    key                  = "terraform-project-module.tfstate"
+  }
+}
+
+# Configure the Microsoft Azure Provider
+provider "azurerm" {
+  #resource_provider_registrations = "none" # This is only required when the User, Service Principal, or Identity running Terraform lacks the permissions to register Azure Resource Providers.
+  features {}
+
+
+  
+}
+
+#create a file main.tf in source you need to change my source to your source remove https from the github url and remove tree/master
+  #done forget to change the line 74 with your own source
+  module "resource_group" {
+    #we need to define from where it will get the module, in this case we are using the Azure resource group module from the Terraform registry
+  #source = https://github.com/gopal1409/kyn-han-solo-july-module26/tree/master/terraform-modules/modules/resource_group
+ source              = "github.com/gopal1409/kyn-han-solo-july-module26/terraform-modules/modules/resource_group"
+  resource_name_prefix = local.resource_name_prefix
+  name                = var.resource_group_name
+  location            = var.resource_group_location
+  tags = local.project_lucky
+}
+
