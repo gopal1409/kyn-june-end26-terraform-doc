@@ -3,6 +3,7 @@ Option 2: Use a Service Principal Secret (Simpler)
 If you want to authenticate using a client secret, use the creds input instead of client-secret.
 
 Step 1: Create a JSON credential
+#in setting we will go to security and quality ----secret and varaibles ---selection action
 
 Run:
 
