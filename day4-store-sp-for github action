@@ -1,0 +1,29 @@
+Option 2: Use a Service Principal Secret (Simpler)
+
+If you want to authenticate using a client secret, use the creds input instead of client-secret.
+
+Step 1: Create a JSON credential
+
+Run:
+
+az ad sp create-for-rbac \
+  --name github-terraform \
+  --role Contributor \
+  --scopes /subscriptions/<subscription-id> \
+  --json-auth
+
+Example output:
+
+{
+  "clientId": "...",
+  "clientSecret": "...",
+  "subscriptionId": "...",
+  "tenantId": "..."
+}
+Step 2: Store it as one GitHub secret
+
+Create a repository secret:
+
+AZURE_CREDENTIALS
+
+Paste the entire JSON into that secret.
