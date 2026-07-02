@@ -46,3 +46,12 @@ output "location" {
   value       = azurerm_resource_group.myrg.location
 }
 
+#lets upload the resource group in github
+   3 git config --global user.name "gopal"                                          
+   4 git config --global user.email "gopal1409@gmail.com"                           
+   5 git init                                                                       
+   6 git add .                                                                      
+   7 git commit -m "terraform module to create resource group"                      
+   8 ssh-keygen -t rsa       
+#just press enter enter enter you will get the path to your public key you can use cat command to get the public key
+   9 cat C:\Users\gopal/.ssh/id_rsa.pub   
