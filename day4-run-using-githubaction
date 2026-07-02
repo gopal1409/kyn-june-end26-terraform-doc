@@ -1,0 +1,18 @@
+##lets upload the code into a new repo 
+  ##do not forget to do terraform destroy
+  #first we will delete some folder and file .terraform folder and .terraform.lock.hcl file we will delete 
+  #then we will create a terraform folder
+  #inside that dump app directory ssh directory and all the manifest file
+  #outside create a file .gitignore and put all this file
+.terraform
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+  ###then do 
+  git init
+  git add .
+  git commit -m "terraform project"
+  #then create a new remote repo add it in the terminal
+  git push origin master
+  ##this will upload your code to github
+  
