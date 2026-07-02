@@ -1,0 +1,82 @@
+###lets add rest of the resource 
+  ###inside the module folder create backend loadbalancer compute networking 
+  ##you can take the refrence from this githhub url 
+  https://github.com/gopal1409/kyn-han-solo-july-module26/tree/master/terraform-modules/modules
+##once you add all the folder 
+  git add .
+  git commit -m "terraform modules added"
+  git push origin master
+  #########then go back to the project where we are calling this modules
+  #now go back to the folder where you are calling this modules inside main.tf below resource group add the networking backend compute lb
+  
+module "networking" {
+  source = "github.com/gopal1409/kyn-han-solo-july-module26/terraform-modules/modules/networking"
+
+  resource_name_prefix = local.resource_name_prefix
+  resource_group_name  = module.resource_group.name
+  location             = module.resource_group.location
+  tags                 = local.project_lucky
+}
+
+module "backend" {
+  source = "github.com/gopal1409/kyn-han-solo-july-module26/terraform-modules/modules/backend"
+
+  resource_name_prefix = local.resource_name_prefix
+  resource_group_name  = module.resource_group.name
+  location             = module.resource_group.location
+  tags                 = local.project_lucky
+}
+
+module "compute" {
+  source = "github.com/gopal1409/kyn-han-solo-july-module26/terraform-modules/modules/compute"
+
+  resource_name_prefix = local.resource_name_prefix
+  resource_group_name  = module.resource_group.name
+  location             = module.resource_group.location
+  subnet_id            = module.networking.subnet_id
+  instance_map         = var.suzuki
+  vm_size              = var.vm_size[var.environment]
+  tags                 = local.project_lucky
+  ssh_public_key_path  = "${path.root}/ssh-keys/terraform-azure.pem.pub"
+  custom_data_path     = "${path.root}/app/app.sh"
+}
+
+module "loadbalancer" {
+  source = "github.com/gopal1409/kyn-han-solo-july-module26/terraform-modules/modules/loadbalancer"
+
+  resource_name_prefix       = local.resource_name_prefix
+  resource_group_name        = module.resource_group.name
+  location                   = module.resource_group.location
+  public_ip_id               = module.backend.public_ip_id
+  network_interface_ids      = module.compute.network_interface_ids
+  nic_ip_configuration_names = module.compute.nic_ip_configuration_names
+}
+
+#then open the varaibles.tf file we need to add the instance type
+  
+variable "vm_size" {
+  description = "The size of the virtual machine by environment."
+  type        = map(string)
+  default = {
+    dev  = "Standard_B1s"
+    test = "Standard_F2"
+    prod = "Standard_D2s_v3"
+  }
+}
+
+variable "suzuki" {
+  description = "Map of virtual machine instances to create."
+  type        = map(string)
+  default = {
+    "vitara"  = "maruti"
+    "wagonr"  = "maruti"
+
+  }
+}
+
+#from the yeasterday project folder copy the app directory and ssh directroy and dump in this folder
+  ###after this do terraform init 
+  then do terraform apply
+  ##finaly terraform destroy
+  
+  
