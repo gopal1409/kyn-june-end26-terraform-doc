@@ -1,0 +1,66 @@
+#modify the provider.tf file and add this line at the end 
+  #subscription id 
+  provider "azurerm" {
+  #resource_provider_registrations = "none" # This is only required when the User, Service Principal, or Identity running Terraform lacks the permissions to register Azure Resource Providers.
+  subscription_id = "73cbb2ca-6092-4ae4-9e58-362b625a3b20" # Replace with your Azure subscription ID
+  features {}
+}
+#then create the github action workflow
+  #on the root directory of your project 
+ # create a folder .github inside the folder create another folder called as workflows inside that we will create a file called as terraform.yml put the below metioned content from line 11 till line 60
+name: terraform Plan Approval Apply
+on:
+    workflow_dispatch: #it will run manually
+permissions: 
+    contents: read #read the content of the repository
+    id-token: write #write the content of the repository
+env:
+    TF_WORKING_DIR: terraform #path of the terraform directory
+jobs:
+###########################################################
+# Plan
+###########################################################
+  
+  terraform-plan: #this is the name of the jon
+    name: Terraform Plan
+    runs-on: ubuntu-latest #this is the runner where the job will run
+    defaults:
+     run:
+        working-directory: ${{ env.TF_WORKING_DIR }} #this is the path of the terraform directory
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform #inside the runner we need to download terraform 
+        uses: hashicorp/setup-terraform@v4
+########################################################
+##azure login
+#######################################################
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+   
+      - name: Terraform init
+        run: terraform init
+        
+      - name: Terraform validate
+        run: terraform validate
+        
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      - name: show plan
+        run: terraform show tfplan
+
+      - name: Upload Plan Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan
+          path: terraform/tfplan
+
+##then push the code
+            git add .
+            git commit -m "added terraform github action"
+            git push origin master
+            ##then click on action select the workflow and run it
