@@ -1,0 +1,89 @@
+GitHub Environments provide deployment protection rules, including manual approval before a deployment proceeds. Below is a step-by-step guide to configure a Production environment with required reviewers.
+
+Step 1: Open Your GitHub Repository
+Log in to GitHub.
+Open your repository.
+
+Example:
+
+https://github.com/<username>/<repository>
+
+You will see:
+
+Code
+Issues
+Pull Requests
+Actions
+Projects
+Wiki
+Security
+Insights
+Settings
+Step 2: Go to Repository Settings
+
+Click
+
+Settings
+
+located at the top-right of the repository navigation bar.
+
+Step 3: Open Environments
+
+From the left navigation menu, scroll to Code and automation and click:
+
+Environments
+
+You should see a page similar to:
+
+Environments
+
+No environments yet.
+
+[ New environment ]
+Step 4: Create the Production Environment
+
+Click:
+
+New environment
+
+Enter the environment name:
+
+Production
+
+Click:
+
+Configure environment
+
+The environment is now created.
+
+Step 5: Configure Deployment Protection Rules
+
+On the Production environment page, locate Deployment protection rules.
+
+Enable:
+
+✔ Required reviewers
+
+This tells GitHub to pause deployments until someone approves them.
+
+Step 6: Add Required Reviewers
+
+Click:
+
+Add reviewers
+
+You can choose:
+
+Individual GitHub users
+GitHub Teams (recommended for organizations)
+
+Examples:
+
+Cloud Team Lead
+DevOps Manager
+Infrastructure Team
+Platform Team
+
+Select one or more reviewers and click Save protection rules.
+
+Note: In a personal repository, you can only add collaborators. GitHub Teams are available in GitHub organizations.
