@@ -1,5 +1,3 @@
-GitHub Environments provide deployment protection rules, including manual approval before a deployment proceeds. Below is a step-by-step guide to configure a Production environment with required reviewers.
-
 Step 1: Open Your GitHub Repository
 Log in to GitHub.
 Open your repository.
@@ -87,3 +85,103 @@ Platform Team
 Select one or more reviewers and click Save protection rules.
 
 Note: In a personal repository, you can only add collaborators. GitHub Teams are available in GitHub organizations.
+
+Step 7: (Optional) Prevent Self-Approval
+
+For better governance, enable:
+
+Prevent self-review
+
+This ensures the person who triggered the deployment cannot approve it themselves.
+
+Step 8: (Optional) Restrict Deployment Branches
+
+Under Deployment branches, choose one of the following:
+
+All branches
+
+or
+
+Selected branches
+
+If you choose Selected branches, add:
+
+main
+
+or
+
+release/*
+
+This prevents deployments from unauthorized branches.
+
+Step 9: Save the Configuration
+
+Click:
+
+Save protection rules
+
+Your Production environment is now protected.
+
+Step 10: Reference the Environment in Your Workflow
+
+In your GitHub Actions workflow, specify the environment:
+
+jobs:
+  terraform-apply:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: Production
+
+    steps:
+      - uses: actions/checkout@v4
+
+When this job starts, GitHub will pause it and request approval.
+
+Step 11: Trigger the Workflow
+
+Trigger the workflow by:
+
+Pushing to the configured branch
+Merging a pull request
+Running it manually using Run workflow
+
+The workflow will execute until it reaches the job that uses the Production environment.
+
+Step 12: Review the Pending Deployment
+
+Go to:
+
+Repository
+└── Actions
+    └── <Workflow Name>
+
+The workflow will show a status similar to:
+
+Waiting for approval
+
+Deployment to Production
+
+The deployment job is paused until an authorized reviewer approves it.
+
+Step 13: Approve the Deployment
+
+An authorized reviewer should:
+
+Open the workflow run.
+Click Review deployments.
+Select the Production environment.
+Optionally enter a comment.
+Click Approve and deploy.
+
+Once approved, the workflow resumes automatically.
+
+Step 14: Monitor the Deployment
+
+After approval, the workflow continues with the remaining steps, such as:
+
+Terraform Init
+Terraform Apply
+Infrastructure Deployment
+
+The Actions page will update in real time until the deployment completes.
