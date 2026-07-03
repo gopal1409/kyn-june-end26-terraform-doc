@@ -123,3 +123,8 @@ cluster_name = "aks-cluster"
   terraform plan
   terraform apply
   
+#lets create our first deployment 
+  7  kubectl apply -f https://k8s.io/examples/controllers/nginx-deployment.yaml
+    8  kubectl get deploy
+    9  kubectl get pod
+###################################lets expose the service
