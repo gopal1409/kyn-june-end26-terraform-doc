@@ -47,5 +47,41 @@ rule "terraform_required_version" {
           ##then do 
             git add .
             git commit -m "tflint added"
-            git push orign master
-            ##then go tthe github action run the workflow
+
+
+#lets add the apply and approval stage before you push the code in tfline block remove the # from contiue on error
+
+#################################################
+##approval and apply
+#################################################
+  terraform-apply:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+    needs: terraform-plan #this will run after the plan job is completed
+    environment:
+      name: production
+
+    defaults:
+     run:
+        working-directory: ${{ env.TF_WORKING_DIR }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: terraform init
+        run: terraform init
+      - name: Download Plan Artifact
+        uses: actions/download-artifact@v4  
+        with:
+          name: terraform-plan
+          path: terraform
+      - name: Terraform Apply
+        run: terraform apply -auto-approve tfplan
+#finally add it commit and push it and run the workflow
