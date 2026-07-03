@@ -1,0 +1,5 @@
+##we need to check the endpoint
+#go to the resource group of endpoint
+  ##select the storage account expand seeting in endpoint you can see the blob url verify the same. 
+  ##then go to private endpoint dns
+  
