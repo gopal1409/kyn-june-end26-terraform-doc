@@ -1,0 +1,319 @@
+Below is the complete step-by-step process to configure GitHub Actions → Azure authentication using OIDC (OpenID Connect) without storing any client secret. This is Microsoft's recommended approach.
+
+Architecture
+GitHub Actions
+       │
+       │ Requests OIDC Token
+       ▼
+GitHub OIDC Provider
+       │
+       ▼
+Microsoft Entra ID
+(App Registration + Federated Credential)
+       │
+       ▼
+Azure Subscription
+       │
+       ▼
+Terraform Deployment
+Prerequisites
+
+You need:
+
+Azure Subscription
+Azure CLI installed
+GitHub repository
+Repository Admin permission
+Azure Owner or User Access Administrator role
+Step 1: Login to Azure
+az login
+
+Check the subscription:
+
+az account show
+
+If necessary, select the correct subscription:
+
+az account set --subscription "<subscription-name>"
+Step 2: Create an App Registration
+
+Azure Portal:
+
+Azure Portal
+        │
+        ▼
+Microsoft Entra ID
+        │
+        ▼
+App registrations
+        │
+        ▼
+New registration
+
+Example:
+
+Name
+
+github-terraform-oidc
+
+Click Register.
+
+Step 3: Copy Important Values
+
+From the Overview page, copy:
+
+Application (Client) ID
+
+Directory (Tenant) ID
+
+Also copy the Subscription ID:
+
+Subscriptions
+      │
+      ▼
+Overview
+
+Save these values.
+
+Step 4: Create a Service Principal
+
+Using Azure CLI:
+
+az ad sp create \
+  --id <CLIENT_ID>
+
+Example:
+
+az ad sp create \
+  --id 12345678-abcd-1234-abcd-1234567890ab
+Step 5: Assign RBAC Permissions
+
+Assign the Contributor role (or a more restrictive role if appropriate):
+
+az role assignment create \
+  --assignee <CLIENT_ID> \
+  --role Contributor \
+  --scope /subscriptions/<SUBSCRIPTION_ID>
+
+For production, consider assigning permissions only at the resource group scope.
+
+Step 6: Configure the Federated Credential
+
+Azure Portal:
+
+Microsoft Entra ID
+      │
+      ▼
+App registrations
+      │
+      ▼
+github-terraform-oidc
+      │
+      ▼
+Certificates & secrets
+      │
+      ▼
+Federated credentials
+
+Click:
+
+Add credential
+Step 7: Choose GitHub Actions
+
+Select:
+
+Federated credential scenario
+
+GitHub Actions
+Step 8: Enter GitHub Details
+
+Suppose your repository is:
+
+Owner
+
+gopal1409
+
+Repository
+
+skywalker-terraform
+
+Choose:
+
+Entity Type
+
+Branch
+
+Branch:
+
+master
+
+or
+
+main
+
+depending on your default branch.
+
+Name:
+
+github-master
+
+Azure generates the subject automatically:
+
+repo:gopal1409/skywalker-terraform:ref:refs/heads/master
+
+This subject must match the repository and branch your workflow runs from.
+
+Click Add.
+
+Step 9: Create GitHub Secrets
+
+In your repository:
+
+Settings
+      │
+      ▼
+Secrets and variables
+      │
+      ▼
+Actions
+
+Create only these three secrets:
+
+Secret	Value
+AZURE_CLIENT_ID	Application (Client) ID
+AZURE_TENANT_ID	Tenant ID
+AZURE_SUBSCRIPTION_ID	Subscription ID
+
+Do not create AZURE_CLIENT_SECRET. OIDC does not use a client secret.
+
+Step 10: Update the GitHub Workflow
+
+Enable OIDC permissions:
+
+permissions:
+  id-token: write
+  contents: read
+
+Authenticate with Azure:
+
+- name: Azure Login
+  uses: azure/login@v3
+
+  with:
+    client-id: ${{ secrets.AZURE_CLIENT_ID }}
+    tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+    subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+No client-secret and no creds input are required for OIDC.
+
+Step 11: Verify Login
+
+Add:
+
+- name: Verify Login
+  run: az account show
+
+Expected output:
+
+{
+  "environmentName": "AzureCloud",
+  "subscriptionId": "...",
+  "tenantId": "..."
+}
+Step 12: Configure the AzureRM Provider
+
+For AzureRM Provider 4.x:
+
+provider "azurerm" {
+  features {}
+
+  subscription_id = var.subscription_id
+}
+
+Define the variable:
+
+variable "subscription_id" {
+  type = string
+}
+
+Pass it in the workflow:
+
+- name: Terraform Plan
+  env:
+    TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  run: terraform plan -out=tfplan
+Step 13: Complete Workflow Example
+name: Terraform OIDC
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+
+  terraform:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Azure Login
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Verify Login
+        run: az account show
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        env:
+          TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        run: terraform plan
+Common Errors
+Error	Cause	Resolution
+AADSTS70025	No federated credential configured	Add a federated credential in the App Registration with the correct repository and branch.
+AADSTS70021	Subject mismatch	Ensure the branch in the federated credential exactly matches the workflow branch.
+Unexpected input client-secret	Using OIDC with client-secret	Remove client-secret and use only client-id, tenant-id, and subscription-id.
+subscription_id is required	AzureRM provider v4.x	Set subscription_id in the provider configuration and pass it to Terraform.
+Final Authentication Flow
+GitHub Workflow
+        │
+        ▼
+GitHub Issues OIDC Token
+        │
+        ▼
+Microsoft Entra ID
+        │
+Checks:
+• Repository
+• Branch
+• Workflow Identity
+        │
+        ▼
+Temporary Azure Access Token
+        │
+        ▼
+Azure Login Action
+        │
+        ▼
+Terraform Init
+        │
+        ▼
+Terraform Plan
+        │
+        ▼
+Terraform Apply
+
+This approach is more secure than storing service principal secrets because GitHub requests a short-lived token for each workflow run instead of using long-lived credentials.
