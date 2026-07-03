@@ -1,0 +1,51 @@
+###to use tflint which is an addtional tool 
+  ##you need to create a file inside the terraform folder .tflint.hcl
+plugin "azurerm" {
+    enabled = true
+    version = "0.32.0"
+    source  = "github.com/terraform-linters/tflint-ruleset-azurerm"
+   
+}
+rule "terraform_module_pinned_source" {
+  enabled = false
+}
+rule "terraform_required_version" {
+  enabled = false
+}
+
+##then go to .github/workflow inside the terraform.yml file add tflint steps below terraform init
+########################################################
+##azure login
+#######################################################
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+   
+      - name: Terraform init
+        run: terraform init
+
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
+      - name: TFLint
+        run: tflint --init 
+
+      - name: TFLint
+        run: tflint -f compact
+        #continue-on-error: true #this will continue the job even if the tflint fails
+
+##once added the worflow go to terraform folder inside the varaibles.tf file at the end add this varaibles
+  variable "suzuki2" {
+  description = "Map of virtual machine instances to create."
+  type        = map(string)
+  default = {
+    "vitara"  = "maruti"
+    "wagonr"  = "maruti"
+
+  }
+
+          ##then do 
+            git add .
+            git commit -m "tflint added"
+            git push orign master
+            ##then go tthe github action run the workflow
