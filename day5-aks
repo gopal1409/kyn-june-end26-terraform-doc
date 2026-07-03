@@ -114,6 +114,11 @@ resource "azurerm_subnet" "aks_subnet" {
    value = azurerm_resource_group.aks_rg.name
  }
 
+
+###add the terraform.tfvars file 
+location = "eastus"
+resource_group_name = "rg-gopal-aks"
+cluster_name = "aks-cluster"
 ##then do terraform init
   terraform plan
   terraform apply
