@@ -128,3 +128,7 @@ cluster_name = "aks-cluster"
     8  kubectl get deploy
     9  kubectl get pod
 ###################################lets expose the service
+kubectl expose deployment nginx --type=LoadBalancer --port=80
+#check it 
+kubectl get svc
+#################you will see load balancer with a ip address
